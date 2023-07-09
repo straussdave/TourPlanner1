@@ -43,10 +43,11 @@ namespace TourPlanner1.Utility
         /// <returns>tour object</returns>
         public Tour GetRoute(string fromLocation, string toLocation, string description, string name)
         {
-            Root root = GetRouteAsync(fromLocation, toLocation).Result;
-            Image<Rgba32> mapImage = GetRouteImageAsync(root.route.sessionId).Result;
+            RouteRoot routeRoot = GetRouteAsync(fromLocation, toLocation).Result;
+            Image<Rgba32> mapImage = GetRouteImageAsync(routeRoot.route.sessionId).Result;
             string uniqueFilename = SaveToFile(mapImage);
-            return BuildNewTour(fromLocation, toLocation, root, uniqueFilename, description, name);
+            Tour tour = new(fromLocation, toLocation, routeRoot, uniqueFilename, description, name);
+            return tour;
         }
 
         /// <summary>
@@ -55,17 +56,17 @@ namespace TourPlanner1.Utility
         /// <param name="fromLocation"></param>
         /// <param name="toLocation"></param>
         /// <returns>route task</returns>
-        private async Task<Root> GetRouteAsync(string fromLocation, string toLocation)
+        private async Task<RouteRoot> GetRouteAsync(string fromLocation, string toLocation)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            Root root = null;
+            RouteRoot routeRoot = null;
             HttpResponseMessage response = client.GetAsync(BuildRouteEndpoint(fromLocation, toLocation)).Result;
             if (response.IsSuccessStatusCode)
             {
-                root = await response.Content.ReadFromJsonAsync<Root>();
+                routeRoot = await response.Content.ReadFromJsonAsync<RouteRoot>();
             }
-            return root;
+            return routeRoot;
         }
 
         /// <summary>
@@ -152,32 +153,6 @@ namespace TourPlanner1.Utility
         private static string GetHeight()
         {
             return System.Configuration.ConfigurationManager.AppSettings["mapHandlerHeight"];
-        }
-
-        /// <summary>
-        /// build tour object from  parameters
-        /// </summary>
-        /// <param name="fromLocation"></param>
-        /// <param name="toLocation"></param>
-        /// <param name="root"></param>
-        /// <param name="uniqueFilename"></param>
-        /// <param name="description"></param>
-        /// <param name="name"></param>
-        /// <returns>newly built tour object</returns>
-        private static Tour BuildNewTour(string fromLocation, string toLocation, Root root, string uniqueFilename, string description, string name)
-        {
-            Tour tour = new()
-            {
-                FromLocation = fromLocation,
-                ToLocation = toLocation,
-                TransportType = root.route.legs[0].maneuvers[0].transportMode,
-                TourDistance = (int)Math.Round(root.route.distance * 1.609),
-                EstimatedTime = root.route.realTime,
-                RouteImage = uniqueFilename,
-                Description = description,
-                Name = name
-            };
-            return tour;
         }
 
         /// <summary>

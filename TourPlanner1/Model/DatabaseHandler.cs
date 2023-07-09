@@ -20,7 +20,6 @@ namespace TourPlanner1.Model
     public class DatabaseHandler
     {
         private readonly TourPlannerDbContext _context;
-
         readonly MapHandler maphandler = new();
 
         public DatabaseHandler()
@@ -188,19 +187,11 @@ namespace TourPlanner1.Model
         /// <param name="TotalTime"></param>
         /// <param name="Rating"></param>
         /// <returns>Newly created Log, null if tourId did not exist</returns>
-        public Log CreateLog(int tourId, DateTime tourDate, string comment, int difficulty, int TotalTime, int Rating)
+        public Log CreateLog(int tourId, DateTime tourDate, string comment, int difficulty, int totalTime, int rating)
         {
             if (_context.Tours.Where(x => x.Id == tourId).FirstOrDefault() != default)
             {
-                Log log = new()
-                {
-                    TourId = tourId,
-                    TourDate = tourDate,
-                    Comment = comment,
-                    Difficulty = difficulty,
-                    TotalTime = TotalTime,
-                    Rating = Rating
-                };
+                Log log = new(tourId, tourDate, comment, difficulty, totalTime, rating);
                 _context.Add(log);
                 _context.SaveChanges();
                 return log;
@@ -288,16 +279,16 @@ namespace TourPlanner1.Model
                 tourDate: new DateTime(2023, 7, 4),
                 comment: "The weather was perfect for a scenic drive from Pöchlarn to Vienna. We enjoyed beautiful landscapes and historic landmarks along the way.",
                 difficulty: 2,
-                TotalTime: 3600,
-                Rating: 4
+                totalTime: 3600,
+                rating: 4
                 );
             CreateLog(
                 tourId: tour1.Id,
                 tourDate: new DateTime(2023, 8, 12),
                 comment: "We decided to take a detour and explore the Wachau Valley. The vineyards and the Danube River were simply breathtaking.",
                 difficulty: 2,
-                TotalTime: 5000,
-                Rating: 5
+                totalTime: 5000,
+                rating: 5
                 );
 
             CreateLog(
@@ -305,16 +296,16 @@ namespace TourPlanner1.Model
                 tourDate: new DateTime(2023, 6, 21),
                 comment: "Our road trip from New York to Miami was filled with excitement and adventure. We encountered diverse landscapes, vibrant cities, and stunning coastal views.",
                 difficulty: 3,
-                TotalTime: 43200,
-                Rating: 5
+                totalTime: 43200,
+                rating: 5
                 );
             CreateLog(
                 tourId: tour2.Id,
                 tourDate: new DateTime(2023, 7, 2),
                 comment: "We made a pit stop at the Kennedy Space Center and witnessed a rocket launch. It was an unforgettable experience!",
                 difficulty: 3,
-                TotalTime: 50000,
-                Rating: 5
+                totalTime: 50000,
+                rating: 5
                 );
 
 
@@ -323,16 +314,16 @@ namespace TourPlanner1.Model
                 tourDate: new DateTime(2023, 9, 10),
                 comment: "The journey from Hamburg to Berlin was smooth and enjoyable. We explored picturesque countryside and experienced the vibrant atmosphere of Berlin.",
                 difficulty: 1,
-                TotalTime: 14400,
-                Rating: 4
+                totalTime: 14400,
+                rating: 4
                 );
             CreateLog(
                 tourId: tour3.Id,
                 tourDate: new DateTime(2023, 10, 5),
                 comment: "We took a scenic route along the Baltic Sea coastline and enjoyed stunning views of the beaches and charming seaside towns.",
                 difficulty: 1,
-                TotalTime: 16000,
-                Rating: 4
+                totalTime: 16000,
+                rating: 4
                 );
         }
     }

@@ -6,6 +6,16 @@ namespace TourPlanner1.Model
 {
     public partial class Log
     {
+        public Log(int tourId, DateTime tourDate, string comment, int difficulty, int totalTime, int rating) 
+        {
+            TourId = tourId;
+            TourDate = tourDate;
+            Comment = comment;
+            Difficulty = difficulty;
+            TotalTime = totalTime;
+            Rating = rating;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

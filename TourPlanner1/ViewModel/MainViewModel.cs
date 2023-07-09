@@ -14,12 +14,11 @@ namespace TourPlanner1.ViewModel
     {
         Logger logger = new();
         ReportGenerator reportGenerator = new();
+        DatabaseHandler dbHandler = new();
 
         int counter;
         [ObservableProperty] //this auto generates code in Dependencies/Analyzers/CommunityToolkin.Mvvm.SourceGenerators/CoomunityToolkit.MvvmSourceGenerators.ObservablePropertyGenerator
         string text;
-
-        DatabaseHandler handler = new();
 
         [RelayCommand] //example command
         void Clicked()
@@ -31,7 +30,6 @@ namespace TourPlanner1.ViewModel
         public MainViewModel()
         {
             logger.log.Debug("MainViewModel created");
-            reportGenerator.GenerateSummaryReport();
         }
     }
 }

@@ -2,11 +2,25 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using static TourPlanner1.Model.RouteResponse;
+using System;
 
 namespace TourPlanner1.Model
 {
     public partial class Tour
     {
+        public Tour(string fromLocation, string toLocation, RouteRoot routeRoot, string uniqueFilename, string description, string name)
+        {
+            FromLocation = fromLocation;
+            ToLocation = toLocation;
+            TransportType = routeRoot.route.legs[0].maneuvers[0].transportMode;
+            TourDistance = (int)Math.Round(routeRoot.route.distance * 1.609);
+            EstimatedTime = routeRoot.route.realTime;
+            RouteImage = uniqueFilename;
+            Description = description;
+            Name = name;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
