@@ -22,8 +22,10 @@ namespace TourPlanner1.Utility
         {
             var a = Assembly.GetExecutingAssembly();
 
-            var patternLayout = new PatternLayout();
-            patternLayout.ConversionPattern = "%date %level %logger - %message%newline";
+            PatternLayout patternLayout = new()
+            {
+                ConversionPattern = "%date %level %logger - %message%newline"
+            };
             patternLayout.ActivateOptions();
 
             var rollingFileAppender = new RollingFileAppender()

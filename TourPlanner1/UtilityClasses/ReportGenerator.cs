@@ -15,14 +15,17 @@ using System.Windows.Documents;
 
 namespace TourPlanner1.Utility
 {
-    internal class ReportGenerator
+    public class ReportGenerator
     {
-        static PathHelper ph = new PathHelper();
-        DatabaseHandler db = new();
-        string reportsPath = ph.GetBasePath() + "\\Reports";
-        string imagesPath = ph.GetBasePath() + "\\Images";
+        readonly static PathHelper ph = new();
+        readonly DatabaseHandler db = new();
+        readonly string reportsPath = ph.GetBasePath() + "\\Reports";
+        readonly string imagesPath = ph.GetBasePath() + "\\Images";
 
-
+        /// <summary>
+        /// Generates a PDF report of a single tour
+        /// </summary>
+        /// <param name="tour"></param>
         public void GenerateReport(Tour tour)
         {
             string pdfName = tour.Name + ".pdf";
@@ -84,6 +87,9 @@ namespace TourPlanner1.Utility
             document.Close();
         }
 
+        /// <summary>
+        /// Generates a PDF report of all tours in the database
+        /// </summary>
         public void GenerateSummaryReport()
         {
             string pdfName = "ToursSummary.pdf";
@@ -127,37 +133,43 @@ namespace TourPlanner1.Utility
             document.Close();
         }
 
-        private string ConvertToHoursAndMinutes(int? seconds)
+        /// <summary>
+        /// Converts seconds to a string like "x Hours and y Minutes"
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <returns>time string</returns>
+        public static string ConvertToHoursAndMinutes(int seconds)
         {
-            string timeString = "";
-            if (seconds.HasValue)
+            string timeString;
+            int hours = (int)Math.Floor((decimal)(seconds / 3600));
+            int minutes = (int)Math.Round((decimal)seconds % 3600 / 60);
+            if (hours <= 0)
             {
-                int hours = (int)Math.Floor((decimal)(seconds / 3600));
-                int minutes = (int)(seconds % 3600 / 60);
-                if (hours <= 0)
-                {
-                    timeString = minutes.ToString() + " Minute";
-                }
-                else if (hours == 1)
-                {
-                    timeString = hours.ToString() + " Hour and " + minutes.ToString() + " Minute";
-                }
-                else
-                {
-                    timeString = hours.ToString() + " Hours and " + minutes.ToString() + " Minute";
-                }
-                if (minutes != 1)
-                {
-                    timeString += "s";
-                }
-
+                timeString = minutes.ToString() + " Minute";
+            }
+            else if (hours == 1)
+            {
+                timeString = hours.ToString() + " Hour and " + minutes.ToString() + " Minute";
+            }
+            else
+            {
+                timeString = hours.ToString() + " Hours and " + minutes.ToString() + " Minute";
+            }
+            if (minutes != 1)
+            {
+                timeString += "s";
             }
             return timeString;
         }
 
-        private string CapitalizeFirstLetter(string text)
+        /// <summary>
+        /// Capitalizes the first letter in a string
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>string with first letter capitalized</returns>
+        private static string CapitalizeFirstLetter(string text)
         {
-            return char.ToUpper(text[0]) + text.Substring(1);
+            return char.ToUpper(text[0]) + text[1..];
         }
     }
 }

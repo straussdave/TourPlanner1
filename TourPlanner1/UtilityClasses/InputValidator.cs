@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner1.Utility
 {
-    internal class InputValidator
+    public class InputValidator
     {
         /// <summary>
         /// sanitizes a string using Regex (by MSDN http://msdn.microsoft.com/en-us/library/844skk0h(v=vs.71).aspx)
@@ -17,7 +17,7 @@ namespace TourPlanner1.Utility
         public static string SanitizeString(string strIn)
         {
             // Replace invalid characters with empty strings.
-            return Regex.Replace(strIn, @"[^\w\.@-]", "");
+            return Regex.Replace(strIn, @"[^\w\.\-\n !?:()/]", "");
         }
     }
 }
