@@ -13,7 +13,7 @@ namespace TourPlanner1.Model
 
         public RouteResponse() { }
 
-        public class RouteRoot
+        public class Root
         {
             public Route route { get; set; }
         }
