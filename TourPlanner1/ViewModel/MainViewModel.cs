@@ -12,12 +12,18 @@ namespace TourPlanner1.ViewModel
 {
     public partial class MainViewModel : ObservableObject
     {
+
+        public MainViewModel()
+        {
+
+        }
+
         Logger logger = new();
         ReportGenerator reportGenerator = new();
 
         int counter;
         [ObservableProperty] //this auto generates code in Dependencies/Analyzers/CommunityToolkin.Mvvm.SourceGenerators/CoomunityToolkit.MvvmSourceGenerators.ObservablePropertyGenerator
-        string text;
+        string text = "0";
 
         DatabaseHandler handler = new();
 
@@ -26,12 +32,6 @@ namespace TourPlanner1.ViewModel
         {
             counter++;
             Text = counter.ToString();
-        }
-
-        public MainViewModel()
-        {
-            logger.log.Debug("MainViewModel created");
-            reportGenerator.GenerateSummaryReport();
         }
     }
 }

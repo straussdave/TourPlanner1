@@ -4,13 +4,102 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlanner1"
-        xmlns:viewmodelns="clr-namespace:TourPlanner1.ViewModel"
+        xmlns:viewmodel="clr-namespace:TourPlanner1.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Window.DataContext>
-        <viewmodelns:MainViewModel />
-    </Window.DataContext>
-    <Grid>
+
+    <Grid Background="WhiteSmoke">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Row 0 -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <!-- Left buttons -->
+            <Button Content="File" FontSize="20" Foreground="Black" Background="LightGray" BorderThickness="2" BorderBrush="DarkGray" Width="200" Margin="2" />
+            <Button Content="Edit" FontSize="20" Foreground="Black" Background="LightGray" BorderThickness="2" BorderBrush="DarkGray" Width="200" Margin="2" />
+            <Button Content="Options" FontSize="20" Foreground="Black" Background="LightGray" BorderThickness="2" BorderBrush="DarkGray" Width="200" Margin="2" />
+            <!-- Right button -->
+            <Button Content="Help" FontSize="20" Foreground="Black" Background="LightGray" BorderThickness="2" BorderBrush="DarkGray" Width="200" Margin="2" HorizontalAlignment="Right" />
+        </StackPanel>
+
+        <!-- Row 1 -->
+        <TextBox Grid.Row="1"  Text="Search" FontSize="20" Foreground="Black" Background="WhiteSmoke" HorizontalAlignment="Stretch" />
+
+        <!-- Row 2 -->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*" />
+                <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Nested Grid Row 0 Column 0 -->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                <!-- Left label -->
+                <Label Content="Tours" Foreground="Black" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <!-- Right buttons -->
+                    <Button Content="+" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" />
+                    <Button Content="-" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" />
+                    <Button Content="..." FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3,3,10,3" Width="40" />
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Nested Grid Row 0 Column 1 -->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <!-- Left buttons -->
+                <Button Content="General" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" MinWidth="80" Margin="10,3,3,3" />
+                <Button Content="Route" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" MinWidth="80" Margin="3" />
+                <Button Content="Misc" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" MinWidth="80" Margin="3" />
+            </StackPanel>
+
+            <!-- Nested Grid Row 1 Column 0 -->
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
+                <Button Content="{Binding Text}" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" Command="{Binding ClickedCommand}"></Button>
+                <Button Content="Tour 2" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
+                <Button Content="Tour 3" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
+                <Button Content="Tour 4" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
+                <Button Content="Tour 5" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
+            </StackPanel>
+
+            <!-- Nested Grid Row 1 Column 1 -->
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="45*" />
+                </Grid.RowDefinitions>
+
+                <!-- Nested nested Grid Row 0 -->
+                <Viewbox Grid.Row="0" Height="200" Margin="10" />
+
+                <!-- Nested nested Grid Row 1 -->
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <!-- Left label -->
+                    <Label Content="Tour Logs" Foreground="Black" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Margin="10,0,0,0" />
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <!-- Right buttons -->
+                        <Button Content="+" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" />
+                        <Button Content="-" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" />
+                        <Button Content="..." FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Nested nested Grid Row 2 -->
+                <Viewbox Grid.Row="2" Height="200" Margin="10" />
+
+            </Grid>
+
+        </Grid>
 
     </Grid>
 </Window>
