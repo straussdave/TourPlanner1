@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlanner1"
-        xmlns:viewmodel="clr-namespace:TourPlanner1.ViewModel"
+        xmlns:viewmodel="clr-namespace:TourPlanner1.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -47,7 +47,7 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <!-- Right buttons -->
-                    <Button Content="+" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" />
+                    <Button Content="+" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" Command="{Binding OpenCreateTourWindowCommand}" />
                     <Button Content="-" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3" Width="40" />
                     <Button Content="..." FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="3,3,10,3" Width="40" />
                 </StackPanel>
@@ -62,13 +62,7 @@
             </StackPanel>
 
             <!-- Nested Grid Row 1 Column 0 -->
-            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
-                <Button Content="{Binding Text}" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" Command="{Binding ClickedCommand}"></Button>
-                <Button Content="Tour 2" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
-                <Button Content="Tour 3" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
-                <Button Content="Tour 4" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
-                <Button Content="Tour 5" FontSize="20" Foreground="Black" Background="LightGray" BorderBrush="DarkGray" BorderThickness="2" Margin="10,10,10,0" />
-            </StackPanel>
+            <!-- Item Control hier einfügen, Documentation: https://wpf-tutorial.com/list-controls/itemscontrol/-->
 
             <!-- Nested Grid Row 1 Column 1 -->
             <Grid Grid.Row="1" Grid.Column="1">

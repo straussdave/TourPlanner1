@@ -61,10 +61,8 @@ namespace TourPlanner1.Utility
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             Root root = null;
             HttpResponseMessage response = client.GetAsync(BuildRouteEndpoint(fromLocation, toLocation)).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                root = await response.Content.ReadFromJsonAsync<Root>();
-            }
+            response.EnsureSuccessStatusCode();
+            root = await response.Content.ReadFromJsonAsync<Root>();
             return root;
         }
 

@@ -20,5 +20,17 @@ namespace TourPlannerTests
         {
             Assert.That(InputValidator.SanitizeString("§$%&H^^e\"ll@o Wo\\rl*+d!"), Is.EqualTo("Hello World!"));
         }
+
+        [Test]
+        public void TestInputLengthNull()
+        {
+            Assert.That(InputValidator.CheckLength(""), Is.EqualTo(false));
+        }
+
+        [Test]
+        public void TestInputLengthPositive()
+        {
+            Assert.That(InputValidator.CheckLength("test"), Is.EqualTo(true));
+        }
     }
 }

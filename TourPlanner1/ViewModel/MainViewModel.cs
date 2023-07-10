@@ -7,12 +7,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using TourPlanner1.View;
 
 namespace TourPlanner1.ViewModel
 {
     public partial class MainViewModel : ObservableObject
     {
-
         public MainViewModel()
         {
 
@@ -32,6 +32,13 @@ namespace TourPlanner1.ViewModel
         {
             counter++;
             Text = counter.ToString();
+        }
+
+        [RelayCommand]
+        void OpenCreateTourWindow()
+        {
+            CreateTourWindow createTourWindow = new();
+            createTourWindow.Show();
         }
     }
 }

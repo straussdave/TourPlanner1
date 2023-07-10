@@ -17,7 +17,26 @@ namespace TourPlanner1.Utility
         public static string SanitizeString(string strIn)
         {
             // Replace invalid characters with empty strings.
-            return Regex.Replace(strIn, @"[^\w\.\-\n !?:()/]", "");
+            if (CheckLength(strIn))
+            {
+                return Regex.Replace(strIn, @"[^\w\.\-\n !?:()/]", "");
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static bool CheckLength(string inputString)
+        {
+            if(String.IsNullOrEmpty(inputString))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }
