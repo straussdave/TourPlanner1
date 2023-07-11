@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using TourPlanner1.View;
+using System.Windows;
 
 namespace TourPlanner1.ViewModel
 {
@@ -18,21 +19,10 @@ namespace TourPlanner1.ViewModel
 
         }
 
-        Logger logger = new();
-        ReportGenerator reportGenerator = new();
-
-        int counter;
-        [ObservableProperty] //this auto generates code in Dependencies/Analyzers/CommunityToolkin.Mvvm.SourceGenerators/CoomunityToolkit.MvvmSourceGenerators.ObservablePropertyGenerator
-        string text = "0";
-
-        static IConfig config = new Config();
-        DatabaseHandler handler = new(new TourPlannerDbContext(), config);
-
-        [RelayCommand] //example command
-        void Clicked()
+        [RelayCommand]
+        void CloseApplication()
         {
-            counter++;
-            Text = counter.ToString();
+            Application.Current.MainWindow.Close();
         }
     }
 }

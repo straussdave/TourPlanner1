@@ -27,7 +27,6 @@
         <ListView Grid.Row="1" ItemsSource="{Binding TourLogList}" SelectedItem="{Binding SelectedLog, Mode=TwoWay}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}"></GridViewColumn>
                     <GridViewColumn Header="Date" DisplayMemberBinding="{Binding TourDate}"></GridViewColumn>
                     <GridViewColumn Header="Comment" DisplayMemberBinding="{Binding Comment}"></GridViewColumn>
                     <GridViewColumn Header="Difficulty" DisplayMemberBinding="{Binding Difficulty}"></GridViewColumn>

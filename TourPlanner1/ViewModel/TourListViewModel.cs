@@ -25,13 +25,17 @@ namespace TourPlanner1.ViewModel
 
         public TourListViewModel()
         {
-            
             DatabaseHandler databaseHandler = new DatabaseHandler(new TourPlannerDbContext(), config);
             TourList = databaseHandler.ReadTours();
             SelectedTour = TourList.FirstOrDefault(defaultValue: null);
             Messenger.Register<TourListViewModel, TourCreatedMessage>(this, (r, m) =>
             {
                 TourList = m.AllTours;
+            });
+            Messenger.Register<TourListViewModel, DeleteTourMessage>(this, (r, m) =>
+            {
+                TourList = m.AllTours;
+                SelectedTour = m.Selected;
             });
         }
 
@@ -52,6 +56,15 @@ namespace TourPlanner1.ViewModel
         {
             DatabaseHandler dbHandler = new(new TourPlannerDbContext(), config);
             dbHandler.DeleteTour(SelectedTour.Id);
+            Messenger.Send(new DeleteTourMessage(dbHandler.ReadTours(), SelectedTour));
+        }
+
+        [RelayCommand]
+        void OpenUpdateTourWindow()
+        {
+            UpdateTourWindow updateTourWindow = new();
+            Messenger.Send(new UpdateTourMessage(SelectedTour));
+            updateTourWindow.ShowDialog();
         }
     }
 }
