@@ -13,7 +13,6 @@ namespace TourPlanner1.ViewModel
 {
     public partial class TourLogsViewModel : ObservableRecipient
     {
-
         [ObservableProperty]
         private List<Log> tourLogList;
 

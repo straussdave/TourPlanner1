@@ -1,8 +1,10 @@
 ﻿
+using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TourPlanner1.Model.Messages;
 using TourPlanner1.Utility;
 
 namespace TourPlanner1.Model
@@ -61,6 +63,7 @@ namespace TourPlanner1.Model
             {
                 _context.Add(tour);
                 _context.SaveChanges();
+                WeakReferenceMessenger.Default.Send(new TourCreatedMessage(ReadTours()));
                 return tour.Id;
             }
             return -1;
@@ -152,8 +155,8 @@ namespace TourPlanner1.Model
         /// <param name="fileName"></param>
         private static void DeleteImage(string fileName)
         {
-            string workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Directory.GetParent(workingDirectory).Parent.Parent.Parent.Parent.Parent.FullName + "\\Images\\" + fileName;
+            string basePath = PathHelper.GetBasePath();
+            string path = basePath + "\\Images\\" + fileName;
             File.Delete(path);
         }
 

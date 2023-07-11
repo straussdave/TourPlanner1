@@ -20,7 +20,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" Content="+" Command="{Binding OpenCreateTourWindowCommand}"></Button>
-            <Button Grid.Column="1" Content="-"></Button>
+            <Button Grid.Column="1" Content="-" Command="{Binding RemoveTourCommand}"></Button>
             <Button Grid.Column="2" Content="..."></Button>
         </Grid>
 
