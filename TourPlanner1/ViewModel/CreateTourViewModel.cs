@@ -34,7 +34,7 @@ namespace TourPlanner1.ViewModel
             {
                 if(dbHandler.CreateTour(FromLocation, ToLocation, Description, TourName) != -1)
                 {
-                    //Close window!
+                    OpenErrorWindow("Tour Created.");
                 }
                 else
                 {

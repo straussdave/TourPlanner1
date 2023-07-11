@@ -34,12 +34,5 @@ namespace TourPlanner1.ViewModel
             counter++;
             Text = counter.ToString();
         }
-
-        [RelayCommand]
-        void OpenCreateTourWindow()
-        {
-            CreateTourWindow createTourWindow = new();
-            createTourWindow.Show();
-        }
     }
 }
