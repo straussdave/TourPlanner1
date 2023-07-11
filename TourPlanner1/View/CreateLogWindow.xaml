@@ -1,0 +1,22 @@
+﻿<Window x:Class="TourPlanner1.View.CreateLogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TourPlanner1.View"
+        mc:Ignorable="d"
+        Title="CreateLogWindow" Height="450" Width="450">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <Label Content="Tour Date" Margin="0"/>
+            <TextBox Name="TourDate" Margin="5" Text="{Binding TourName}"/>
+            <Label Content="Comment" Margin="0"/>
+            <TextBox Name="Comment" Margin="5" Text="{Binding Description}" Height="45"/>
+            <Label Content="Difficulty" Margin="0"/>
+            <TextBox Name="Difficulty" Margin="5" Text="{Binding FromLocation}"/>
+            <Label Content="TotalTime" Margin="0"/>
+            <TextBox Name="TotalTime" Margin="5" Text="{Binding ToLocation}"/>
+            <Button Content="Create" Margin="20" Command="{Binding CreateTourCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -83,17 +83,24 @@ namespace TourPlanner1.Model
             if (_context.Tours.Where(x => x.Id == id).FirstOrDefault() != default)
             {
                 var tour = _context.Update(_context.Tours.Where(x => x.Id == id).FirstOrDefault());
-                Tour newTour = maphandler.GetRoute(fromLocation, toLocation, description, name);
-                tour.Entity.FromLocation = fromLocation;
-                tour.Entity.ToLocation = toLocation;
+                if(tour.Entity.FromLocation != fromLocation || tour.Entity.ToLocation !=  toLocation)
+                {
+                    Tour newTour = maphandler.GetRoute(fromLocation, toLocation, description, name);
+                    tour.Entity.FromLocation = fromLocation;
+                    tour.Entity.ToLocation = toLocation;
+                    tour.Entity.Description = description;
+                    tour.Entity.Name = name;
+                    tour.Entity.TourDistance = newTour.TourDistance;
+                    tour.Entity.TransportType = newTour.TransportType;
+                    tour.Entity.EstimatedTime = newTour.EstimatedTime;
+                    tour.Entity.RouteImage = newTour.RouteImage;
+                    _context.SaveChanges();
+                    return newTour;
+                }
                 tour.Entity.Description = description;
                 tour.Entity.Name = name;
-                tour.Entity.TourDistance = newTour.TourDistance;
-                tour.Entity.TransportType = newTour.TransportType;
-                tour.Entity.EstimatedTime = newTour.EstimatedTime;
-                tour.Entity.RouteImage = newTour.RouteImage;
                 _context.SaveChanges();
-                return newTour;
+                return tour.Entity;
             }
             return null;
         }
