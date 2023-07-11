@@ -1,31 +1,25 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Npgsql;
-using TourPlanner1;
-using TourPlanner1.Model;
 using TourPlanner1.Utility;
 
 namespace TourPlanner1.Model
 {
-    public class DatabaseHandler
+    public class DatabaseHandler : IDatabaseHandler
     {
         private readonly TourPlannerDbContext _context;
 
-        readonly MapHandler maphandler = new();
+        private static IConfig _config;
 
-        public DatabaseHandler()
+        MapHandler maphandler;
+
+        public DatabaseHandler(TourPlannerDbContext dbContext, IConfig config)
         {
-            _context = new TourPlannerDbContext();
+            _config = config;
+            _context = dbContext;
+            maphandler = new(_config);
 
             if (!_context.Tours.Any())
             {
@@ -59,13 +53,17 @@ namespace TourPlanner1.Model
         /// <param name="toLocation"></param>
         /// <param name="description"></param>
         /// <param name="name"></param>
-        /// <returns>Newly created tour</returns>
-        public Tour CreateTour(string fromLocation, string toLocation, string description, string name)
+        /// <returns>Id of created tour</returns>
+        public int CreateTour(string fromLocation, string toLocation, string description, string name)
         {
             Tour tour = maphandler.GetRoute(fromLocation, toLocation, description, name);
-            _context.Add(tour);
-            _context.SaveChanges();
-            return tour;
+            if( tour != null)
+            {
+                _context.Add(tour);
+                _context.SaveChanges();
+                return tour.Id;
+            }
+            return -1;
         }
 
         /// <summary>
@@ -279,12 +277,12 @@ namespace TourPlanner1.Model
         /// </summary>
         private void PopulateDatabase()
         {
-            Tour tour1 = CreateTour("Pöchlarn", "Vienna", "A carride from Pöchlarn to Vienna", "Pöchlarn-Vienna");
-            Tour tour2 = CreateTour("New York", "Miami", "A carride from New York to Miami", "New York-Miami");
-            Tour tour3 = CreateTour("Hamburg", "Berlin", "A carride from Hamburg to Berlin", "Hamburg-Berlin");
+            int tour1Id = CreateTour("Pöchlarn", "Vienna", "A carride from Pöchlarn to Vienna", "Pöchlarn-Vienna");
+            int tour2Id = CreateTour("New York", "Miami", "A carride from New York to Miami", "New York-Miami");
+            int tour3Id = CreateTour("Hamburg", "Berlin", "A carride from Hamburg to Berlin", "Hamburg-Berlin");
 
             CreateLog(
-                tourId: tour1.Id,
+                tourId: tour1Id,
                 tourDate: new DateTime(2023, 7, 4),
                 comment: "The weather was perfect for a scenic drive from Pöchlarn to Vienna. We enjoyed beautiful landscapes and historic landmarks along the way.",
                 difficulty: 2,
@@ -292,7 +290,7 @@ namespace TourPlanner1.Model
                 Rating: 4
                 );
             CreateLog(
-                tourId: tour1.Id,
+                tourId: tour1Id,
                 tourDate: new DateTime(2023, 8, 12),
                 comment: "We decided to take a detour and explore the Wachau Valley. The vineyards and the Danube River were simply breathtaking.",
                 difficulty: 2,
@@ -301,7 +299,7 @@ namespace TourPlanner1.Model
                 );
 
             CreateLog(
-                tourId: tour2.Id,
+                tourId: tour2Id,
                 tourDate: new DateTime(2023, 6, 21),
                 comment: "Our road trip from New York to Miami was filled with excitement and adventure. We encountered diverse landscapes, vibrant cities, and stunning coastal views.",
                 difficulty: 3,
@@ -309,7 +307,7 @@ namespace TourPlanner1.Model
                 Rating: 5
                 );
             CreateLog(
-                tourId: tour2.Id,
+                tourId: tour2Id,
                 tourDate: new DateTime(2023, 7, 2),
                 comment: "We made a pit stop at the Kennedy Space Center and witnessed a rocket launch. It was an unforgettable experience!",
                 difficulty: 3,
@@ -319,7 +317,7 @@ namespace TourPlanner1.Model
 
 
             CreateLog(
-                tourId: tour3.Id,
+                tourId: tour3Id,
                 tourDate: new DateTime(2023, 9, 10),
                 comment: "The journey from Hamburg to Berlin was smooth and enjoyable. We explored picturesque countryside and experienced the vibrant atmosphere of Berlin.",
                 difficulty: 1,
@@ -327,7 +325,7 @@ namespace TourPlanner1.Model
                 Rating: 4
                 );
             CreateLog(
-                tourId: tour3.Id,
+                tourId: tour3Id,
                 tourDate: new DateTime(2023, 10, 5),
                 comment: "We took a scenic route along the Baltic Sea coastline and enjoyed stunning views of the beaches and charming seaside towns.",
                 difficulty: 1,

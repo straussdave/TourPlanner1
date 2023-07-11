@@ -12,15 +12,16 @@ using System;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace TourPlanner1.Utility
 {
     public class ReportGenerator
     {
-        readonly static PathHelper ph = new();
-        readonly DatabaseHandler db = new();
-        readonly string reportsPath = ph.GetBasePath() + "\\Reports";
-        readonly string imagesPath = ph.GetBasePath() + "\\Images";
+        static IConfig config = new Config();
+        readonly DatabaseHandler db = new(new TourPlannerDbContext(), config);
+        readonly string reportsPath = PathHelper.GetBasePath() + "\\Reports";
+        readonly string imagesPath = PathHelper.GetBasePath() + "\\Images";
 
         /// <summary>
         /// Generates a PDF report of a single tour
@@ -34,16 +35,16 @@ namespace TourPlanner1.Utility
             var pdf = new PdfDocument(writer);
             var document = new iText.Layout.Document(pdf);
 
-            var header = new iText.Layout.Element.Paragraph(tour.Name)
+            var header = new iText.Layout.Element.Paragraph(CapitalizeFirstLetter(tour.Name))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                 .SetFontSize(25)
                 .SetBold();
 
-            var description = new iText.Layout.Element.Paragraph(tour.Description);
+            var description = new iText.Layout.Element.Paragraph(CapitalizeFirstLetter(tour.Description));
             var transportType = new iText.Layout.Element.Paragraph("Transport Type: " + CapitalizeFirstLetter(tour.TransportType));
-            var fromLocation = new iText.Layout.Element.Paragraph("From: " + tour.FromLocation);
-            var toLocation = new iText.Layout.Element.Paragraph("To: " + tour.ToLocation);
+            var fromLocation = new iText.Layout.Element.Paragraph("From: " + CapitalizeFirstLetter(tour.FromLocation));
+            var toLocation = new iText.Layout.Element.Paragraph("To: " + CapitalizeFirstLetter(tour.ToLocation));
             var tourDistance = new iText.Layout.Element.Paragraph("Distance: " + tour.TourDistance + "km");
             var time = new iText.Layout.Element.Paragraph("Estimated Time: " + ConvertToHoursAndMinutes(tour.EstimatedTime));
             var imageFileName = tour.RouteImage;
@@ -109,16 +110,16 @@ namespace TourPlanner1.Utility
             List<Tour> T = db.ReadTours();
             foreach (var t in T)
             {
-                var tourHeader = new iText.Layout.Element.Paragraph(t.Name)
+                var tourHeader = new iText.Layout.Element.Paragraph(CapitalizeFirstLetter(t.Name))
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                 .SetFontSize(20)
                 .SetBold();
 
-                var description = new iText.Layout.Element.Paragraph(t.Description);
+                var description = new iText.Layout.Element.Paragraph(CapitalizeFirstLetter(t.Description));
                 var transportType = new iText.Layout.Element.Paragraph("Transport Type: " + CapitalizeFirstLetter(t.TransportType));
-                var fromLocation = new iText.Layout.Element.Paragraph("From: " + t.FromLocation);
-                var toLocation = new iText.Layout.Element.Paragraph("To: " + t.ToLocation);
+                var fromLocation = new iText.Layout.Element.Paragraph("From: " + CapitalizeFirstLetter(t.FromLocation));
+                var toLocation = new iText.Layout.Element.Paragraph("To: " + CapitalizeFirstLetter(t.ToLocation));
                 var tourDistance = new iText.Layout.Element.Paragraph("Distance: " + t.TourDistance + "km");
                 var time = new iText.Layout.Element.Paragraph("Estimated Time: " + ConvertToHoursAndMinutes(t.EstimatedTime));
 
@@ -167,7 +168,7 @@ namespace TourPlanner1.Utility
         /// </summary>
         /// <param name="text"></param>
         /// <returns>string with first letter capitalized</returns>
-        private static string CapitalizeFirstLetter(string text)
+        public static string CapitalizeFirstLetter(string text)
         {
             return char.ToUpper(text[0]) + text[1..];
         }

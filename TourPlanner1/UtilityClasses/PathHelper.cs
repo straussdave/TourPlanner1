@@ -11,7 +11,7 @@ namespace TourPlanner1.Utility
     {
         public PathHelper() { }
 
-        public string GetBasePath()
+        public static string GetBasePath()
         {
             string workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string basePath = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;

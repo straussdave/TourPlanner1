@@ -24,13 +24,14 @@ namespace TourPlanner1.Utility
         string key;
         int imageWidth;
         int imageHeight;
-        readonly PathHelper ph = new();
+        private static IConfig _config;
 
         /// <summary>
         /// constuctor initializes variables and sets HttpClient base address
         /// </summary>
-        public MapHandler()
+        public MapHandler(IConfig config)
         {
+            _config = config;
             InitializeMapHandler();
             client.BaseAddress = new Uri("https://www.mapquestapi.com");
         }
@@ -44,7 +45,15 @@ namespace TourPlanner1.Utility
         public Tour GetRoute(string fromLocation, string toLocation, string description, string name)
         {
             Root root = GetRouteAsync(fromLocation, toLocation).Result;
-            Image<Rgba32> mapImage = GetRouteImageAsync(root.route.sessionId).Result;
+            Image<Rgba32> mapImage;
+            try
+            {
+                mapImage = GetRouteImageAsync(root.route.sessionId).Result;
+            }
+            catch
+            {
+                return null;
+            }
             string uniqueFilename = SaveToFile(mapImage);
             return BuildNewTour(fromLocation, toLocation, root, uniqueFilename, description, name);
         }
@@ -59,8 +68,8 @@ namespace TourPlanner1.Utility
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            Root root = null;
-            HttpResponseMessage response = client.GetAsync(BuildRouteEndpoint(fromLocation, toLocation)).Result;
+            Root root;
+            HttpResponseMessage response = client.GetAsync(BuildRouteEndpoint(fromLocation, toLocation, key, client)).Result;
             response.EnsureSuccessStatusCode();
             root = await response.Content.ReadFromJsonAsync<Root>();
             return root;
@@ -71,8 +80,10 @@ namespace TourPlanner1.Utility
         /// </summary>
         /// <param name="fromLocation"></param>
         /// <param name="toLocation"></param>
-        /// <returns>string with endpoint</returns>
-        private string BuildRouteEndpoint(string fromLocation, string toLocation)
+        /// <param name="key"></param>
+        /// <param name="client"></param>
+        /// <returns>endpoint string</returns>
+        public static string BuildRouteEndpoint(string fromLocation, string toLocation, string key, HttpClient client)
         {
             string endpoint = client.BaseAddress.ToString() +
                 "directions/v2/route?key=" + key +
@@ -91,7 +102,7 @@ namespace TourPlanner1.Utility
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/jpeg"));
-            HttpResponseMessage response = client.GetAsync(BuildRouteImageEndpoint(sessionId)).Result;
+            HttpResponseMessage response = client.GetAsync(BuildRouteImageEndpoint(sessionId, key, imageWidth, imageHeight, client)).Result;
             response.EnsureSuccessStatusCode();
 
             byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
@@ -105,8 +116,12 @@ namespace TourPlanner1.Utility
         /// build the endpoint for image retrieval
         /// </summary>
         /// <param name="sessionId"></param>
-        /// <returns></returns>
-        private string BuildRouteImageEndpoint(string sessionId)
+        /// <param name="key"></param>
+        /// <param name="imageWidth"></param>
+        /// <param name="imageHeight"></param>
+        /// <param name="client"></param>
+        /// <returns>endpoint string</returns>
+        public static string BuildRouteImageEndpoint(string sessionId, string key, int imageWidth, int imageHeight, HttpClient client)
         {
             string endpoint = client.BaseAddress.ToString() + "staticmap/v5/map?key=" + key + "&session=" + sessionId + "&size=" + imageWidth + "," + imageHeight;
             return endpoint;
@@ -123,33 +138,30 @@ namespace TourPlanner1.Utility
         }
 
         /// <summary>
-        /// gets key from config file
+        /// gets key from config class
         /// </summary>
-        /// <param name="config"></param>
         /// <returns>key string</returns>
         private static string GetKey()
         {
-            return System.Configuration.ConfigurationManager.AppSettings["mapHandlerKey"];
+            return _config.MapHandlerKey;
         }
 
         /// <summary>
-        /// gets width from config file
+        /// gets width from config class
         /// </summary>
-        /// <param name="config"></param>
         /// <returns>width string</returns>
         private static string GetWidth()
         {
-            return System.Configuration.ConfigurationManager.AppSettings["mapHandlerWidth"];
+            return _config.MapHandlerWidth;
         }
 
         /// <summary>
-        /// gets height from config file
+        /// gets height from config class
         /// </summary>
-        /// <param name="config"></param>
         /// <returns>height string</returns>
         private static string GetHeight()
         {
-            return System.Configuration.ConfigurationManager.AppSettings["mapHandlerHeight"];
+            return _config.MapHandlerHeight;
         }
 
         /// <summary>
@@ -162,7 +174,7 @@ namespace TourPlanner1.Utility
         /// <param name="description"></param>
         /// <param name="name"></param>
         /// <returns>newly built tour object</returns>
-        private static Tour BuildNewTour(string fromLocation, string toLocation, Root root, string uniqueFilename, string description, string name)
+        public static Tour BuildNewTour(string fromLocation, string toLocation, Root root, string uniqueFilename, string description, string name)
         {
             Tour tour = new()
             {
@@ -185,11 +197,16 @@ namespace TourPlanner1.Utility
         /// <returns>uniqueFilename</returns>
         private string SaveToFile(Image<Rgba32> mapImage)
         {
-            string imagesPath = ph.GetBasePath() + "\\Images";
+            if(_config.Mode == "unitTest")
+            {
+                return "image.jpg";
+            }
+            string imagesPath = PathHelper.GetBasePath() + "\\Images";
             var uniqueFilename = string.Format(@"{0}.jpg", Guid.NewGuid());
             string path = Path.Combine(imagesPath, uniqueFilename);
             mapImage.SaveAsJpeg(path);
             return uniqueFilename;
+
         }
     }
 }

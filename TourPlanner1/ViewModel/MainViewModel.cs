@@ -25,7 +25,8 @@ namespace TourPlanner1.ViewModel
         [ObservableProperty] //this auto generates code in Dependencies/Analyzers/CommunityToolkin.Mvvm.SourceGenerators/CoomunityToolkit.MvvmSourceGenerators.ObservablePropertyGenerator
         string text = "0";
 
-        DatabaseHandler handler = new();
+        static IConfig config = new Config();
+        DatabaseHandler handler = new(new TourPlannerDbContext(), config);
 
         [RelayCommand] //example command
         void Clicked()

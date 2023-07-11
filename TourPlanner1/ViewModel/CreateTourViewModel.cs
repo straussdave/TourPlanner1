@@ -6,6 +6,7 @@ using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TourPlanner1.Model;
 using TourPlanner1.Utility;
 using TourPlanner1.View;
@@ -14,7 +15,8 @@ namespace TourPlanner1.ViewModel
 {
     public partial class CreateTourViewModel : ObservableObject
     {
-        DatabaseHandler dbHandler = new();
+        static IConfig config = new Config();
+        DatabaseHandler dbHandler = new(new TourPlannerDbContext(), config);
 
         [ObservableProperty]
         string tourName;
@@ -30,13 +32,19 @@ namespace TourPlanner1.ViewModel
         {
             if (ValidateInput())
             {
-                dbHandler.CreateTour(FromLocation, ToLocation, Description, TourName);
+                if(dbHandler.CreateTour(FromLocation, ToLocation, Description, TourName) != -1)
+                {
+                    //Close window!
+                }
+                else
+                {
+                    OpenErrorWindow("Invalid Input!");
+                }
             }
             else
             {
                 OpenErrorWindow("Invalid Input! Every field needs a value.\nYou can close this Window.");
             }
-            
         }
 
         bool ValidateInput()
