@@ -17,6 +17,7 @@ namespace TourPlanner1.ViewModel
     {
         static IConfig config = new Config();
         DatabaseHandler dbHandler = new(new TourPlannerDbContext(), config);
+        private static readonly log4net.ILog log = new Logger().log;
 
         [ObservableProperty]
         string tourName;
@@ -34,15 +35,18 @@ namespace TourPlanner1.ViewModel
             {
                 if(dbHandler.CreateTour(FromLocation, ToLocation, Description, TourName) != -1)
                 {
+                    log.Info("Tour created");
                     OpenErrorWindow("Tour Created.");
                 }
                 else
                 {
+                    log.Info("Invalid Input in Tour Creation");
                     OpenErrorWindow("Invalid Input!");
                 }
             }
             else
             {
+                log.Info("Invalid Input in Tour Creation");
                 OpenErrorWindow("Invalid Input! Every field needs a value.\nYou can close this Window.");
             }
         }

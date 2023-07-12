@@ -20,6 +20,7 @@ namespace TourPlanner1.ViewModel
     {
         IConfig config = new Model.Config();
         ReportGenerator reportGenerator = new();
+        private static readonly log4net.ILog log = new Logger().log;
 
         [ObservableProperty]
         string routeImage;
@@ -32,6 +33,7 @@ namespace TourPlanner1.ViewModel
 
         public MainViewModel()
         {
+            log.Info("MainViewModel created");
             DatabaseHandler databaseHandler = new DatabaseHandler(new TourPlannerDbContext(), config);
             TourList = databaseHandler.ReadTours();
             SelectedTour = TourList.FirstOrDefault(defaultValue: null);

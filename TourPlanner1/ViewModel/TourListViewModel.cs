@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner1.Model;
 using TourPlanner1.Model.Messages;
+using TourPlanner1.Utility;
 using TourPlanner1.View;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
@@ -16,6 +17,7 @@ namespace TourPlanner1.ViewModel
     public partial class TourListViewModel : ObservableRecipient
     {
         IConfig config = new Model.Config();
+        private static readonly log4net.ILog log = new Logger().log;
 
         [ObservableProperty]
         private List<Tour> tourList;
@@ -37,7 +39,6 @@ namespace TourPlanner1.ViewModel
                 TourList = m.AllTours;
                 SelectedTour = m.Selected;
             });
-            
         }
 
         partial void OnSelectedTourChanged(Tour oldValue, Tour newValue)
@@ -55,6 +56,7 @@ namespace TourPlanner1.ViewModel
         [RelayCommand]
         void RemoveTour()
         {
+            log.Info("Tour Deleted");
             DatabaseHandler dbHandler = new(new TourPlannerDbContext(), config);
             dbHandler.DeleteTour(SelectedTour.Id);
             Messenger.Send(new DeleteTourMessage(dbHandler.ReadTours(), SelectedTour));

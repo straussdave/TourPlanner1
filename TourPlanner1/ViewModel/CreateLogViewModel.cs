@@ -13,6 +13,7 @@ using static TourPlanner1.Model.RouteResponse;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Linq.Expressions;
 using TourPlanner1.View;
+using log4net;
 
 namespace TourPlanner1.ViewModel
 {
@@ -28,6 +29,7 @@ namespace TourPlanner1.ViewModel
 
         static IConfig config = new Config();
         DatabaseHandler dbHandler = new(new TourPlannerDbContext(), config);
+        private static readonly log4net.ILog log = new Logger().log;
 
         [ObservableProperty]
         DateTime date = DateTime.Now;
@@ -49,16 +51,19 @@ namespace TourPlanner1.ViewModel
             {
                 if (dbHandler.CreateLog(tourId, Date, Comment, Int32.Parse(Difficulty), Int32.Parse(TotalTime)*60, Int32.Parse(Rating)) != null)
                 {
+                    log.Info("Log Created");
                     OpenErrorWindow("Log Created.");
                     Messenger.Send(new LogCreatedMessage(dbHandler.ReadLogs()));
                 }
                 else
                 {
+                    log.Info("Invalid Input in Tour Creation");
                     OpenErrorWindow("Invalid Input!");
                 }
             }
             else
             {
+                log.Info("Invalid Input in Tour Creation");
                 OpenErrorWindow("Invalid Input! You can close this Window.");
             }
         }

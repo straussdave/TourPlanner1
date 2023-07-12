@@ -8,11 +8,13 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using TourPlanner1.View;
 using Org.BouncyCastle.Utilities;
+using TourPlanner1.Utility;
 
 namespace TourPlanner1.ViewModel
 {
     public partial class TourLogsViewModel : ObservableRecipient
     {
+        private static readonly log4net.ILog log = new Logger().log;
         [ObservableProperty]
         private ObservableCollection<Log> tourLogList = new();
 
@@ -57,6 +59,7 @@ namespace TourPlanner1.ViewModel
         [RelayCommand]
         public void RemoveLog()
         {
+            log.Info("Log Deleted");
             IConfig config = new Model.Config();
             DatabaseHandler dbHandler = new(new TourPlannerDbContext(), config);
             dbHandler.DeleteLog(SelectedLog.Id);
