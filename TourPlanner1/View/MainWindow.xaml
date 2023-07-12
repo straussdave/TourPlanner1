@@ -20,6 +20,8 @@
             <MenuItem Header="File">
                 <MenuItem Header="New"></MenuItem>
                 <MenuItem Header="Close" Command="{Binding CloseApplicationCommand}"></MenuItem>
+                <MenuItem Header="Tour Report" Command="{Binding GenerateReportCommand}"></MenuItem>
+                <MenuItem Header="Summary Report" Command="{Binding GenerateSummaryReportCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="Edit"></MenuItem>
         </Menu>
@@ -50,7 +52,7 @@
 
                 <TabControl Grid.Row="0">
                     <TabItem Header="General">
-                        <Image Height="150" Width="250" Source="{Binding RouteImage}"></Image>
+                        <Image Height="auto" Width="auto" Source="{Binding RouteImage}"></Image>
                     </TabItem>
                     <TabItem Header="Route">
 
