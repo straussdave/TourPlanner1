@@ -50,7 +50,7 @@
 
                 <TabControl Grid.Row="0">
                     <TabItem Header="General">
-
+                        <Image Height="150" Width="250" Source="{Binding RouteImage}"></Image>
                     </TabItem>
                     <TabItem Header="Route">
 

@@ -19,9 +19,9 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="+" Command="{Binding OpenCreateTourWindowCommand}"></Button>
-            <Button Grid.Column="1" Content="-" Command=""></Button>
-            <Button Grid.Column="2" Content="..."></Button>
+            <Button Grid.Column="0" Content="+" Command="{Binding OpenCreateLogWindowCommand}"></Button>
+            <Button Grid.Column="1" Content="-" Command="{Binding RemoveLogCommand}"></Button>
+            <Button Grid.Column="2" Content="..." Command="{Binding OpenUpdateLogWindowCommand}"></Button>
         </Grid>
 
         <ListView Grid.Row="1" ItemsSource="{Binding TourLogList}" SelectedItem="{Binding SelectedLog, Mode=TwoWay}">

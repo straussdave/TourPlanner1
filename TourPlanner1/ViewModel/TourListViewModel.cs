@@ -37,6 +37,7 @@ namespace TourPlanner1.ViewModel
                 TourList = m.AllTours;
                 SelectedTour = m.Selected;
             });
+            
         }
 
         partial void OnSelectedTourChanged(Tour oldValue, Tour newValue)
