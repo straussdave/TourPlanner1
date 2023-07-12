@@ -162,9 +162,9 @@ namespace TourPlanner1.Model
         /// <param name="fileName"></param>
         private static void DeleteImage(string fileName)
         {
-            string basePath = PathHelper.GetBasePath();
-            string path = basePath + "\\Images\\" + fileName;
-            File.Delete(path);
+            //string basePath = PathHelper.GetBasePath();
+            //string path = basePath + "\\Images\\" + fileName;
+            //File.Delete(path);
         }
 
         /// <summary>

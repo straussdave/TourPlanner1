@@ -38,8 +38,14 @@ namespace TourPlanner1.ViewModel
             TourList = databaseHandler.ReadTours();
             SelectedTour = TourList.FirstOrDefault(defaultValue: null);
             Messenger.Register<MainViewModel, TourSelectedMessage>(this, (r, m) => {
-                SelectedTour = m.Selected;
-                RouteImage = PathHelper.GetBasePath() + "\\Images\\" + SelectedTour.RouteImage;
+                if(m.Selected != null)
+                {
+                    SelectedTour = m.Selected;
+                    RouteImage = PathHelper.GetBasePath() + "\\Images\\" + SelectedTour.RouteImage;
+                }
+            });
+            Messenger.Register<MainViewModel, DeleteTourMessage>(this, (r, m) => {
+                RouteImage = null;
             });
         }
 
